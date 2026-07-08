@@ -29,11 +29,13 @@ use Throwable;
 final class Compiler
 {
     /**
-     * Restores Tailwind v4's `container` utility, which TailwindPHP does not
-     * emit. Declarations mirror the official Node build exactly (width: 100%
-     * plus one max-width per default breakpoint; no margin/padding).
+     * Restores Tailwind v4's `container` utility for stock engines that do not
+     * emit it. The trilbymedia fork ships it natively (upstream PR #5), so this
+     * is only injected when `container_fix` is enabled. Declarations mirror the
+     * official Node build exactly (width: 100% plus one max-width per default
+     * breakpoint; no margin/padding).
      *
-     * @see https://github.com/dnnsjsk/tailwindphp (upstream issue: missing container)
+     * @see https://github.com/inline0/tailwindphp/pull/5 (native container utility)
      */
     private const CONTAINER_FIX = <<<'CSS'
 

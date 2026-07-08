@@ -19,7 +19,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "tailwindphp/tailwindphp": "dev-trilby#21080c9 as 1.4.2"
+        "trilbymedia/tailwindphp": "dev-trilby#502e485 as 1.4.2"
     },
     "autoload": {
         "psr-4": {
