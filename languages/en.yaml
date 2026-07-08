@@ -6,3 +6,9 @@ PLUGIN_TAILWIND4:
   AUTO_COMPILE_ON_SAVE_HELP: Recompile automatically when the active theme's configuration is saved. Off by default; compile manually with the admin button or the CLI command.
   SCAN_EXTENSIONS: Scanned File Extensions
   SCAN_EXTENSIONS_HELP: File extensions scanned for Tailwind class candidates when building the CSS.
+  # Admin Next UI
+  MENU_TITLE: Tailwind 4
+  COMPILE_CSS: Compile CSS
+  COMPILE_SUCCESS: 'Compiled %1$s in %2$s (%3$s)'
+  COMPILE_FAILED: 'Compile failed: %s'
+  UNKNOWN_ERROR: unknown error
