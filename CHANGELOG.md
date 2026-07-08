@@ -1,3 +1,10 @@
+# v1.0.1
+## 07/08/2026
+
+1. [](#improved)
+    * Updated the vendored Tailwind engine to the renamed [`trilbymedia/tailwindphp`](https://github.com/trilbymedia/tailwindphp) fork (branch `trilby`), now carrying more fixes than the original two: CLI source resolution (relative `@import`, `@source` globs, yaml/md scanning), `theme()` resolution inside arbitrary values, `--spacing(0|1)` shortcuts, a `currentcolor` color-mix polyfill, mask angle-unit normalization, and atomic engine-cache writes. Two fixes are submitted upstream (PRs [#4](https://github.com/inline0/tailwindphp/pull/4)/[#5](https://github.com/inline0/tailwindphp/pull/5)); the rest are maintained in the fork.
+    * The engine metadata reader now recognizes both the fork and the upstream package name, so the manifest and CLI report the correct engine identity after the rename.
+
 # v1.0.0
 ## 07/07/2026
 
