@@ -1,5 +1,7 @@
 PLUGIN_TAILWIND4:
+  # Blueprint form fields
   PLUGIN_STATUS: Plugin Status
+  PLUGIN_STATUS_HELP: Enable or disable the Tailwind 4 plugin. When disabled, the compiler, CLI command, API endpoints and admin button are all inactive.
   MINIFY: Minify Output
   MINIFY_HELP: Minify the compiled CSS. Turn off to produce readable output for debugging.
   AUTO_COMPILE_ON_SAVE: Auto-compile on Save

@@ -10,7 +10,8 @@ author:
   email: andy@trilbymedia.com
   url: https://trilby.media
 homepage: https://github.com/trilbymedia/grav-plugin-tailwind4
-keywords: grav, plugin, tailwind, tailwindcss, css
+docs: https://github.com/trilbymedia/grav-plugin-tailwind4/blob/develop/README.md
+keywords: grav, plugin, tailwind, tailwindcss, css, compiler, no-node, php
 bugs: https://github.com/trilbymedia/grav-plugin-tailwind4/issues
 license: MIT
 compatibility:
@@ -25,6 +26,7 @@ form:
     enabled:
       type: toggle
       label: PLUGIN_TAILWIND4.PLUGIN_STATUS
+      help: PLUGIN_TAILWIND4.PLUGIN_STATUS_HELP
       highlight: 1
       default: 1
       options:
