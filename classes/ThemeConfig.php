@@ -12,7 +12,7 @@ use RuntimeException;
  *   tailwind4:
  *     input: css/site.css
  *     output: build/css/site.css
- *     sources: [self://templates, user://pages, user://config, plugin-templates]
+ *     sources: [self://, user://pages, user://config, plugin-templates]
  *     safelist_files: [available-classes.md]
  *
  * Every key is optional. The defaults are chosen so an unmodified Typhoon (or
