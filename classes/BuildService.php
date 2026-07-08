@@ -89,7 +89,7 @@ final class BuildService
             ['twig', 'md', 'yaml', 'yml', 'php', 'html', 'htm', 'js'],
         );
         $minify = (bool) ($config->get('plugins.tailwind4.minify') ?? true);
-        $containerFix = (bool) ($config->get('plugins.tailwind4.container_fix') ?? true);
+        $containerFix = (bool) ($config->get('plugins.tailwind4.container_fix') ?? false);
 
         return new self(
             themeConfig: $themeConfig,
@@ -364,8 +364,17 @@ final class BuildService
         $file = \dirname(__DIR__) . '/vendor/composer/installed.php';
         if (is_file($file)) {
             $data = include $file;
-            $pretty = $data['versions']['tailwindphp/tailwindphp']['pretty_version'] ?? null;
+            $package = $data['versions']['tailwindphp/tailwindphp'] ?? [];
+            $pretty = $package['pretty_version'] ?? null;
             if (\is_string($pretty) && $pretty !== '') {
+                // Branch installs (the trilbymedia fork's trilby branch) report
+                // e.g. "dev-trilby"; append the short commit so the manifest
+                // records the exact engine source.
+                $ref = $package['reference'] ?? null;
+                if (str_starts_with($pretty, 'dev-') && \is_string($ref) && $ref !== '') {
+                    $pretty .= '@' . substr($ref, 0, 7);
+                }
+
                 return $version = $pretty;
             }
         }

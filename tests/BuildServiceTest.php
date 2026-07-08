@@ -65,7 +65,9 @@ final class BuildServiceTest extends TestCase
         self::assertGreaterThan(0.0, $manifest->compileMs);
         self::assertGreaterThanOrEqual($manifest->compileMs, $manifest->durationMs);
         self::assertSame(hash_file('sha256', $this->themeDir . '/css/site.css'), $manifest->inputHash);
-        self::assertMatchesRegularExpression('/^v?\d/', $manifest->engineVersion);
+        // A tagged engine reports "v1.4.2"; the trilbymedia fork branch reports
+        // "dev-trilby@<short-sha>". Both identify an exact engine source.
+        self::assertMatchesRegularExpression('/^(v?\d|dev-\S+@[0-9a-f]{7})/', $manifest->engineVersion);
 
         // Manifest persisted to <manifestDir>/<theme>.json and loadable.
         $manifestPath = $service->manifestPath();

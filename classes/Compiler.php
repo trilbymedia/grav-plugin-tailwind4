@@ -59,12 +59,12 @@ final class Compiler
 CSS;
 
     /**
-     * @param bool        $containerFix Inject the container-utility workaround (default on).
+     * @param bool        $containerFix Inject the container-utility fallback for stock engines (default off; the trilbymedia fork ships it natively).
      * @param string|null $autoloadPath Path to the engine's Composer autoloader.
      *                                  Defaults to the plugin's own vendor/autoload.php.
      */
     public function __construct(
-        private readonly bool $containerFix = true,
+        private readonly bool $containerFix = false,
         private readonly ?string $autoloadPath = null,
     ) {
     }

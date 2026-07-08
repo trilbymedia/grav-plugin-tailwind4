@@ -44,10 +44,15 @@ final class CompilerTest extends TestCase
         $this->assertStringContainsString('rebeccapurple', $result->css);
     }
 
-    /** Acceptance (c), fix ON: container + xl:container emit max-width rules. */
-    public function testContainerFixOnProducesMaxWidth(): void
+    /**
+     * Acceptance (c), updated for the trilbymedia engine fork: the container
+     * utility is implemented natively, so it must compile with the injection
+     * OFF (the default). Guards against regressing to a stock engine that
+     * lacks it.
+     */
+    public function testContainerCompilesNativelyWithoutInjection(): void
     {
-        $result = (new Compiler(containerFix: true))->compile(
+        $result = (new Compiler(containerFix: false))->compile(
             self::FIXTURES . '/basic/input.css',
             ['container', 'xl:container'],
             minify: false,
@@ -57,16 +62,21 @@ final class CompilerTest extends TestCase
         $this->assertStringContainsString('max-width: 80rem', $result->css);
     }
 
-    /** Acceptance (c), fix OFF: no container rule at all. */
-    public function testContainerFixOffProducesNothing(): void
+    /**
+     * The injection fallback (for a stock engine without the container fix)
+     * must still produce a working container rule rather than breaking the
+     * native one.
+     */
+    public function testContainerFixFallbackStillCompiles(): void
     {
-        $result = (new Compiler(containerFix: false))->compile(
+        $result = (new Compiler(containerFix: true))->compile(
             self::FIXTURES . '/basic/input.css',
             ['container', 'xl:container'],
             minify: false,
         );
 
-        $this->assertDoesNotMatchRegularExpression('/\.container\b/', $result->css);
+        $this->assertMatchesRegularExpression('/\.container\b/', $result->css);
+        $this->assertStringContainsString('max-width: 80rem', $result->css);
     }
 
     /** Acceptance (d): @source inline() classes appear without being candidates. */

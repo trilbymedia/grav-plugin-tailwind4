@@ -5,9 +5,9 @@
    * Initial release: compile Tailwind CSS 4.x for Grav themes directly from PHP,
      with no Node.js, no npm install and no build step. Compilation is on demand
      (admin button, CLI, or config save) and never runs on a front-end request.
-   * Compiler wrapper around the vendored `tailwindphp/tailwindphp` engine
-     (pinned to an exact tested version), including a `container` utility fix for
-     a utility missing from the engine.
+   * Compiler wrapper around the vendored `tailwindphp/tailwindphp` engine,
+     consumed from the trilbymedia fork (branch `trilby`: v1.4.2 plus two engine
+     fixes submitted upstream as PRs #4 and #5) and pinned to an exact commit.
    * Scanner: an Oxide-style tokenizer that extracts class candidates from Twig,
      Markdown, YAML, PHP and HTML, with a per-file `mtime`+`size` cache under
      `cache://tailwind4/scan` so unchanged files are free on a rebuild.
@@ -38,8 +38,10 @@
      performance guard (500-page tree: cold compile well under 2s, warm under
      500ms, compile peak under 64MB).
 1. [](#bugfix)
-   * Patched the vendored TailwindPHP engine (via `cweagans/composer-patches`,
-     `patches/tailwindphp-nested-apply.patch`) to fix a bug where a rule whose
+   * Fixed (in the engine fork, upstream PR #4) a bug where a rule whose
      `@apply` expands to more than one declaration silently dropped its nested
      child rules. This restored Typhoon's breadcrumb, form-label and nav-indent
      styling and brought the parity diff to zero missing selectors.
+   * Fixed (in the engine fork, upstream PR #5) the missing `container` utility;
+     the plugin's `container_fix` injection is now an off-by-default fallback for
+     stock engines.

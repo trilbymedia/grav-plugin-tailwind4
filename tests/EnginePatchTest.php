@@ -8,16 +8,15 @@ use Grav\Plugin\Tailwind4\Compiler;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Guards the vendored TailwindPHP engine patch
- * (patches/tailwindphp-nested-apply.patch).
+ * Guards the nested-@apply fix carried by the trilbymedia engine fork
+ * (branch `trilby`, consumed via composer as `dev-trilby`; submitted upstream
+ * as inline0/tailwindphp PR #4).
  *
- * Upstream v1.4.2 drops every nested child rule of a rule whose `@apply`
- * expands to more than one declaration. We carry a composer patch that fixes
- * it. If a future engine bump reinstalls the package without the patch, these
- * assertions fail loudly instead of silently regressing Typhoon's breadcrumb,
- * form-label and nav-indent styling.
- *
- * @see patches/tailwindphp-nested-apply.patch
+ * Stock tailwindphp v1.4.2 drops every nested child rule of a rule whose
+ * `@apply` expands to more than one declaration. If a future engine bump
+ * points composer back at a stock release without the fix, these assertions
+ * fail loudly instead of silently regressing Typhoon's breadcrumb, form-label
+ * and nav-indent styling.
  */
 final class EnginePatchTest extends TestCase
 {
@@ -36,7 +35,7 @@ final class EnginePatchTest extends TestCase
         $this->assertMatchesRegularExpression(
             '/#bug\s+\.child\s*\{[^}]*display:\s*block/s',
             $css,
-            'Nested .child rule was dropped — the engine patch is missing (upstream nested-@apply bug).',
+            'Nested .child rule was dropped — the engine fix is missing (stock tailwindphp nested-@apply bug).',
         );
     }
 

@@ -5,10 +5,12 @@ Grav themes directly from PHP. There is no Node.js, no `npm install`, and no bui
 step. Compilation is triggered on demand from an admin button, the CLI, or a config
 save, and never runs on a front-end page request.
 
-It is built on [`tailwindphp/tailwindphp`](https://github.com/dnnsjsk/tailwindphp),
-a zero-dependency PHP port of the Tailwind engine. The engine is pinned to an exact
-tested version and shipped vendored, so Tailwind upgrades happen deliberately per
-plugin release rather than on every `composer update`.
+It is built on [`tailwindphp/tailwindphp`](https://github.com/inline0/tailwindphp),
+a zero-dependency PHP port of the Tailwind engine, consumed through the
+[trilbymedia fork](https://github.com/trilbymedia/tailwindphp) (branch `trilby`:
+the v1.4.2 release plus two fixes that have been submitted upstream). The engine is
+pinned to an exact tested commit and shipped vendored, so Tailwind upgrades happen
+deliberately per plugin release rather than on every `composer update`.
 
 ## Why
 
@@ -46,8 +48,8 @@ bin/gpm install tailwind4
 ### Manual / development install
 
 Clone or copy the plugin into `user/plugins/tailwind4`, then install its
-dependencies (this vendors the pinned Tailwind engine and applies the bundled
-engine patch):
+dependencies (this vendors the pinned Tailwind engine from the trilbymedia
+fork):
 
 ```
 cd user/plugins/tailwind4
@@ -232,18 +234,20 @@ Node build contains selectors the plugin build does not.
   (the Compile CSS button or the CLI) to regenerate it. An automatic post-update
   recompile hook is a later enhancement, not part of this release.
 
-* **The engine is pinned and patched on purpose.** `tailwindphp/tailwindphp` is
-  required at an exact version rather than a range, and shipped vendored. This keeps
-  Tailwind's behavior stable across `composer update` and makes every Tailwind
-  upgrade a deliberate, tested plugin release. See the [`patches/`](patches/)
-  directory for the engine patches applied on install.
+* **The engine is pinned and forked on purpose.** `tailwindphp/tailwindphp` is
+  consumed from the [trilbymedia fork](https://github.com/trilbymedia/tailwindphp)
+  at an exact commit on its `trilby` branch (v1.4.2 plus fixes), and shipped
+  vendored. This keeps Tailwind's behavior stable across `composer update` and makes
+  every Tailwind upgrade a deliberate, tested plugin release.
 
-* **Nested `@apply` patch.** The plugin applies
-  `patches/tailwindphp-nested-apply.patch` (wired through `cweagans/composer-patches`,
-  so it re-applies on a clean install) to fix an engine bug: a rule whose `@apply`
-  expanded to more than one declaration silently dropped its nested child rules.
-  Without the patch, Typhoon's breadcrumb, form-label and nav-indent styling would be
-  missing. The fix is being offered upstream.
+* **Engine fixes carried by the fork.** The `trilby` branch fixes two stock-engine
+  bugs, both submitted upstream as individual PRs
+  ([#4](https://github.com/inline0/tailwindphp/pull/4),
+  [#5](https://github.com/inline0/tailwindphp/pull/5)): a rule whose `@apply`
+  expanded to more than one declaration silently dropped its nested child rules
+  (this would break Typhoon's breadcrumb, form-label and nav-indent styling), and
+  the `container` utility was missing entirely. The plugin's `container_fix` option
+  remains available as a fallback for stock engines and defaults to off.
 
 * **Dynamic classes need safelisting, exactly as in real Tailwind.** A class name
   that is never written out in full anywhere the scanner looks will not be generated.
