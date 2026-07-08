@@ -8,20 +8,20 @@ namespace Grav\Plugin\Tailwind4;
  * Resolves a theme's tailwind4 `sources` contract into a flat list of absolute
  * files and directories for the {@see Scanner} to walk.
  *
- * This class is deliberately Grav-free so it can be unit tested without a booted
- * Grav instance: the constructor takes explicit paths (theme dir, user dir) and
- * either a list of plugin-template dirs or a callable that yields them lazily. A
- * thin static factory that builds those inputs from Grav streams
- * (`self://`, `user://`, enabled-plugin discovery) belongs in the build service.
- *
- * TODO(WP3): add SourceResolver::fromGrav() that reads Grav streams and the
- * enabled-plugins list, then delegates to this constructor. Keep the Grav
- * dependency there, never here.
+ * The core class is deliberately Grav-free so it can be unit tested without a
+ * booted Grav instance: the constructor takes explicit paths (theme dir, user
+ * dir) and either a list of plugin-template dirs or a callable that yields them
+ * lazily. {@see fromGrav()} is the only Grav-coupled entry point: it reads the
+ * streams and the enabled-plugins list, then delegates to the constructor.
  *
  * The default source set (used when the theme yaml declares no
- * `tailwind4.sources`) mirrors Typhoon's scripts/resolve-sources.js:
- *   - the theme's own templates/ dir
- *   - the theme root's Markdown safelist files (e.g. available-classes.md)
+ * `tailwind4.sources`) mirrors what the Node CLI ends up scanning for a theme
+ * like Typhoon: its automatic source detection covers the whole theme dir (the
+ * working directory of the npm build, so templates, the theme's own yaml,
+ * blueprints, PHP and Markdown files all contribute candidates), and the
+ * theme's scripts/resolve-sources.js adds the Grav dirs outside it:
+ *   - the theme dir itself (build output, vendor/, node_modules/, .git are
+ *     excluded by the Scanner)
  *   - user://pages
  *   - user://config
  *   - every enabled plugin's templates/ dir
@@ -53,6 +53,54 @@ final class SourceResolver
         array|callable $pluginTemplateDirs = [],
     ) {
         $this->pluginTemplateDirs = $pluginTemplateDirs;
+    }
+
+    /**
+     * Build a resolver from a booted Grav instance.
+     *
+     * Grav is referenced only inside this method, so the class stays unit
+     * testable without it. Plugin template dirs are supplied as a lazy
+     * callable that walks the enabled-plugins list on first use.
+     *
+     * @param string|null $themeDir Theme root to resolve against; null means
+     *                              the active theme (`theme://`).
+     */
+    public static function fromGrav(?string $themeDir = null): self
+    {
+        $grav = \Grav\Common\Grav::instance();
+
+        /** @var \RocketTheme\Toolbox\ResourceLocator\UniformResourceLocator $locator */
+        $locator = $grav['locator'];
+
+        if ($themeDir === null) {
+            $found = $locator->findResource('theme://', true);
+            $themeDir = \is_string($found) ? $found : '';
+        }
+
+        $userDir = $locator->findResource('user://', true);
+        $userDir = \is_string($userDir) ? $userDir : '';
+
+        $pluginTemplateDirs = static function () use ($grav): array {
+            /** @var \RocketTheme\Toolbox\ResourceLocator\UniformResourceLocator $locator */
+            $locator = $grav['locator'];
+            $plugins = (array) $grav['config']->get('plugins', []);
+            ksort($plugins);
+
+            $dirs = [];
+            foreach ($plugins as $name => $pluginConfig) {
+                if (empty($pluginConfig['enabled'])) {
+                    continue;
+                }
+                $dir = $locator->findResource('plugins://' . $name . '/templates', true);
+                if (\is_string($dir) && $dir !== '' && is_dir($dir)) {
+                    $dirs[] = $dir;
+                }
+            }
+
+            return $dirs;
+        };
+
+        return new self(rtrim($themeDir, '/'), rtrim($userDir, '/'), $pluginTemplateDirs);
     }
 
     /**
@@ -100,13 +148,13 @@ final class SourceResolver
     {
         $paths = [];
 
-        $templates = $this->themeDir . '/templates';
-        if (is_dir($templates)) {
-            $paths[] = $templates;
-        }
-
-        foreach ($this->themeRootMarkdown() as $md) {
-            $paths[] = $md;
+        // The whole theme dir, matching the Node CLI's automatic source
+        // detection (which scans the npm build's working directory). The
+        // theme's own yaml, blueprints and PHP files contribute real
+        // candidates - Typhoon's default config strings carry classes like
+        // xl:container that appear nowhere in the templates.
+        if (is_dir($this->themeDir)) {
+            $paths[] = $this->themeDir;
         }
 
         $pages = $this->userDir . '/pages';
@@ -185,19 +233,6 @@ final class SourceResolver
         $path = str_starts_with($file, '/') ? $file : $this->themeDir . '/' . $file;
 
         return is_file($path) ? [$path] : [];
-    }
-
-    /**
-     * Markdown files sitting in the theme root (Typhoon keeps its class safelist
-     * documentation there as available-classes.md).
-     *
-     * @return array<int, string>
-     */
-    private function themeRootMarkdown(): array
-    {
-        $matches = glob($this->themeDir . '/*.md');
-
-        return $matches !== false ? $matches : [];
     }
 
     /**

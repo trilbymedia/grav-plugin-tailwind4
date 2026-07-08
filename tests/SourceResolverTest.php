@@ -54,17 +54,16 @@ final class SourceResolverTest extends TestCase
 
         $resolved = $resolver->resolve();
 
-        self::assertContains($this->themeDir . '/templates', $resolved);
+        // The whole theme dir is scanned by default, mirroring the Node CLI's
+        // automatic source detection: the theme's own yaml, blueprints, PHP
+        // and Markdown files all contribute candidates, not just templates/.
+        // (The build output dir is excluded at Scanner level, wired up by the
+        // BuildService.)
+        self::assertContains($this->themeDir, $resolved);
         self::assertContains($this->userDir . '/pages', $resolved);
         self::assertContains($this->userDir . '/config', $resolved);
         self::assertContains($this->userDir . '/plugins/one/templates', $resolved);
         self::assertContains($this->userDir . '/plugins/two/templates', $resolved);
-        // Theme-root markdown (safelist docs) is picked up by default.
-        self::assertContains($this->themeDir . '/available-classes.md', $resolved);
-        self::assertContains($this->themeDir . '/README.md', $resolved);
-        // The theme's build output dir is never a default source.
-        self::assertNotContains($this->themeDir . '/build', $resolved);
-        self::assertNotContains($this->themeDir . '/build/css', $resolved);
     }
 
     public function testPluginTemplateDirsCanBeSuppliedAsCallable(): void
@@ -170,8 +169,9 @@ final class SourceResolverTest extends TestCase
         $resolver = new SourceResolver($themeDir, dirname($themeDir), []);
         $resolved = $resolver->resolve();
 
-        self::assertContains($themeDir . '/templates', $resolved);
-        self::assertContains($themeDir . '/available-classes.md', $resolved);
+        // The theme dir itself is the default source; templates, the theme
+        // yaml and available-classes.md are all inside it.
+        self::assertContains($themeDir, $resolved);
     }
 
     // --- helpers -----------------------------------------------------------

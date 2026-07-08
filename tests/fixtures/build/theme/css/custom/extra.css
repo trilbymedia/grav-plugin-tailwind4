@@ -1,0 +1,4 @@
+/* Marker rule proving the nested relative import chain resolves end to end. */
+.build-fixture-marker {
+    color: rebeccapurple;
+}

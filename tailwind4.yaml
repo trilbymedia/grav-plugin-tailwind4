@@ -1,4 +1,5 @@
 enabled: true
 minify: true
+container_fix: true                # restore the container utility missing from tailwindphp
 auto_compile_on_save: false        # recompile when theme config is saved
-scan_extensions: [twig, md, yaml, php, html, htm]
+scan_extensions: [twig, md, yaml, yml, php, html, htm, js]
