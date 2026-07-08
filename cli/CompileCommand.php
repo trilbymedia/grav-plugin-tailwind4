@@ -100,7 +100,7 @@ class CompileCommand extends ConsoleCommand
             ['Candidates', (string) $manifest->candidateCount],
             ['Compile', sprintf('%.1f ms engine, %.1f ms total', $manifest->compileMs, $manifest->durationMs)],
             ['Memory', self::formatBytes($manifest->peakMemoryBytes) . ' peak'],
-            ['Engine', 'tailwindphp/tailwindphp ' . $manifest->engineVersion],
+            ['Engine', trim(BuildService::enginePackageName() . ' ' . $manifest->engineVersion)],
         ];
         if (($path = $service->manifestPath()) !== null) {
             $rows[] = ['Manifest', $path];

@@ -356,29 +356,54 @@ final class BuildService
      */
     public static function engineVersion(): string
     {
-        static $version = null;
-        if ($version !== null) {
-            return $version;
+        return self::engineMeta()['version'];
+    }
+
+    /**
+     * Composer package name of the engine actually installed, e.g.
+     * "trilbymedia/tailwindphp" (the maintained fork) or "tailwindphp/tailwindphp"
+     * (upstream). Empty string if neither is present.
+     */
+    public static function enginePackageName(): string
+    {
+        return self::engineMeta()['name'];
+    }
+
+    /**
+     * Read the engine's Composer metadata from vendor/composer/installed.php (no
+     * autoload needed) so it works whether or not the engine has been loaded, and
+     * never collides with Grav's own Composer runtime. Recognizes both the
+     * maintained fork and upstream, preferring the fork when both are present.
+     *
+     * @return array{name: string, version: string}
+     */
+    private static function engineMeta(): array
+    {
+        static $meta = null;
+        if ($meta !== null) {
+            return $meta;
         }
 
         $file = \dirname(__DIR__) . '/vendor/composer/installed.php';
         if (is_file($file)) {
             $data = include $file;
-            $package = $data['versions']['tailwindphp/tailwindphp'] ?? [];
-            $pretty = $package['pretty_version'] ?? null;
-            if (\is_string($pretty) && $pretty !== '') {
-                // Branch installs (the trilbymedia fork's trilby branch) report
-                // e.g. "dev-trilby"; append the short commit so the manifest
-                // records the exact engine source.
-                $ref = $package['reference'] ?? null;
-                if (str_starts_with($pretty, 'dev-') && \is_string($ref) && $ref !== '') {
-                    $pretty .= '@' . substr($ref, 0, 7);
-                }
+            foreach (['trilbymedia/tailwindphp', 'tailwindphp/tailwindphp'] as $name) {
+                $package = $data['versions'][$name] ?? null;
+                $pretty = \is_array($package) ? ($package['pretty_version'] ?? null) : null;
+                if (\is_string($pretty) && $pretty !== '') {
+                    // Branch installs (the fork's trilby branch) report e.g.
+                    // "dev-trilby"; append the short commit so the manifest
+                    // records the exact engine source.
+                    $ref = $package['reference'] ?? null;
+                    if (str_starts_with($pretty, 'dev-') && \is_string($ref) && $ref !== '') {
+                        $pretty .= '@' . substr($ref, 0, 7);
+                    }
 
-                return $version = $pretty;
+                    return $meta = ['name' => $name, 'version' => $pretty];
+                }
             }
         }
 
-        return $version = 'unknown';
+        return $meta = ['name' => '', 'version' => 'unknown'];
     }
 }
