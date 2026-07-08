@@ -8,3 +8,6 @@
 /vendor/
 composer.lock
 .phpunit.cache/
+
+# Internal development plan, not published
+PLAN.md

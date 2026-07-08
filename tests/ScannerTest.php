@@ -254,7 +254,7 @@ final class ScannerTest extends TestCase
 
     public function testScansRealTyphoonTemplatesIncludingMissedClass(): void
     {
-        $templates = '/Users/rhuk/Projects/grav/grav-theme-typhoon/templates';
+        $templates = (getenv('TYPHOON_THEME_DIR') ?: \dirname(__DIR__, 2) . '/grav-theme-typhoon') . '/templates';
         if (!is_dir($templates)) {
             self::markTestSkipped('Typhoon theme not available at ' . $templates);
         }
@@ -274,7 +274,7 @@ final class ScannerTest extends TestCase
 
     public function testScansTyphoonAvailableClassesMarkdownTable(): void
     {
-        $file = '/Users/rhuk/Projects/grav/grav-theme-typhoon/available-classes.md';
+        $file = (getenv('TYPHOON_THEME_DIR') ?: \dirname(__DIR__, 2) . '/grav-theme-typhoon') . '/available-classes.md';
         if (!is_file($file)) {
             self::markTestSkipped('Typhoon available-classes.md not available at ' . $file);
         }

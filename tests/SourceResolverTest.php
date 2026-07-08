@@ -161,7 +161,7 @@ final class SourceResolverTest extends TestCase
 
     public function testResolvesRealTyphoonThemeContract(): void
     {
-        $themeDir = '/Users/rhuk/Projects/grav/grav-theme-typhoon';
+        $themeDir = getenv('TYPHOON_THEME_DIR') ?: \dirname(__DIR__, 2) . '/grav-theme-typhoon';
         if (!is_dir($themeDir . '/templates')) {
             self::markTestSkipped('Typhoon theme not available at ' . $themeDir);
         }
