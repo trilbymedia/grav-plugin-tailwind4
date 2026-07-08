@@ -1,7 +1,6 @@
 <?php
 namespace Grav\Plugin;
 
-use Composer\Autoload\ClassLoader;
 use Grav\Common\Plugin;
 
 /**
@@ -31,13 +30,24 @@ class Tailwind4Plugin extends Plugin
     }
 
     /**
-     * Register the plugin's Composer autoloader.
+     * Register an autoloader for the plugin's own classes only.
      *
-     * @return ClassLoader
+     * Deliberately NOT the Composer autoloader: vendor/autoload.php triggers the
+     * TailwindPHP engine's `files` autoload (~68 files, ~5 MB without opcache) on
+     * every request. Compiler::loadEngine() requires vendor/autoload.php on
+     * demand, so the engine costs nothing until a compile actually runs.
      */
-    public function autoload(): ClassLoader
+    public function autoload(): void
     {
-        return require __DIR__ . '/vendor/autoload.php';
+        spl_autoload_register(static function (string $class): void {
+            $prefix = 'Grav\\Plugin\\Tailwind4\\';
+            if (str_starts_with($class, $prefix)) {
+                $file = __DIR__ . '/classes/' . str_replace('\\', '/', substr($class, strlen($prefix))) . '.php';
+                if (is_file($file)) {
+                    require $file;
+                }
+            }
+        });
     }
 
     /**
