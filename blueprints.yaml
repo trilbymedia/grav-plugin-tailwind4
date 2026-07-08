@@ -1,8 +1,8 @@
 name: Tailwind4
 slug: tailwind4
 type: plugin
-version: 0.1.0
-testing: true
+version: 1.0.0
+testing: false
 description: Compiles Tailwind CSS 4.x for Grav themes directly from PHP, with no Node.js and no build step
 icon: paint-brush
 author:
