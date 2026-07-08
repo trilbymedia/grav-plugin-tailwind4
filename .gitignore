@@ -2,11 +2,9 @@
 .idea/*
 .vscode/*
 
-# Dependencies are ignored during development. A Grav plugin ships its
-# vendor/ directory in the released package, so `composer install --no-dev`
-# must be run and vendor/ committed (or bundled) as part of cutting a release.
-/vendor/
-composer.lock
+# A Grav plugin ships self-contained: GPM/zip installs have no composer step,
+# so vendor/ and composer.lock are committed (production-only, regenerated with
+# `composer install --no-dev`) as part of cutting a release.
 .phpunit.cache/
 
 # Internal development plan, not published

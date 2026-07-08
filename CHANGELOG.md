@@ -1,3 +1,9 @@
+# v1.0.2
+## 07/08/2026
+
+1. [](#bugfix)
+    * Ship the plugin self-contained. `vendor/` (production dependencies, including the vendored Tailwind engine) and `composer.lock` are now committed and bundled in the release package. GPM and zip installs have no `composer install` step, so 1.0.0 and 1.0.1 shipped without the engine and could not compile — installing 1.0.2 works out of the box.
+
 # v1.0.1
 ## 07/08/2026
 
