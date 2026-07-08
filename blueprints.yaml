@@ -1,0 +1,67 @@
+name: Tailwind4
+slug: tailwind4
+type: plugin
+version: 0.1.0
+testing: true
+description: Compiles Tailwind CSS 4.x for Grav themes directly from PHP, with no Node.js and no build step
+icon: paint-brush
+author:
+  name: Andy Miller
+  email: andy@trilbymedia.com
+  url: https://trilby.media
+homepage: https://github.com/trilbymedia/grav-plugin-tailwind4
+keywords: grav, plugin, tailwind, tailwindcss, css
+bugs: https://github.com/trilbymedia/grav-plugin-tailwind4/issues
+license: MIT
+compatibility:
+  grav: ['2.0']
+
+dependencies:
+  - { name: grav, version: '>=2.0.0' }
+
+form:
+  validation: loose
+  fields:
+    enabled:
+      type: toggle
+      label: PLUGIN_TAILWIND4.PLUGIN_STATUS
+      highlight: 1
+      default: 1
+      options:
+        1: PLUGIN_ADMIN.ENABLED
+        0: PLUGIN_ADMIN.DISABLED
+      validate:
+        type: bool
+
+    minify:
+      type: toggle
+      label: PLUGIN_TAILWIND4.MINIFY
+      help: PLUGIN_TAILWIND4.MINIFY_HELP
+      highlight: 1
+      default: 1
+      options:
+        1: PLUGIN_ADMIN.ENABLED
+        0: PLUGIN_ADMIN.DISABLED
+      validate:
+        type: bool
+
+    auto_compile_on_save:
+      type: toggle
+      label: PLUGIN_TAILWIND4.AUTO_COMPILE_ON_SAVE
+      help: PLUGIN_TAILWIND4.AUTO_COMPILE_ON_SAVE_HELP
+      highlight: 0
+      default: 0
+      options:
+        1: PLUGIN_ADMIN.ENABLED
+        0: PLUGIN_ADMIN.DISABLED
+      validate:
+        type: bool
+
+    scan_extensions:
+      type: selectize
+      label: PLUGIN_TAILWIND4.SCAN_EXTENSIONS
+      help: PLUGIN_TAILWIND4.SCAN_EXTENSIONS_HELP
+      selectize:
+        create: true
+      validate:
+        type: commalist

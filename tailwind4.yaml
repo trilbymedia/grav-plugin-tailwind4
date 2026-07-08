@@ -1,0 +1,4 @@
+enabled: true
+minify: true
+auto_compile_on_save: false        # recompile when theme config is saved
+scan_extensions: [twig, md, yaml, php, html, htm]

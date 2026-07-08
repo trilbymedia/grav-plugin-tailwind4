@@ -1,0 +1,8 @@
+PLUGIN_TAILWIND4:
+  PLUGIN_STATUS: Plugin Status
+  MINIFY: Minify Output
+  MINIFY_HELP: Minify the compiled CSS. Turn off to produce readable output for debugging.
+  AUTO_COMPILE_ON_SAVE: Auto-compile on Save
+  AUTO_COMPILE_ON_SAVE_HELP: Recompile automatically when the active theme's configuration is saved. Off by default; compile manually with the admin button or the CLI command.
+  SCAN_EXTENSIONS: Scanned File Extensions
+  SCAN_EXTENSIONS_HELP: File extensions scanned for Tailwind class candidates when building the CSS.

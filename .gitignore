@@ -1,0 +1,9 @@
+.DS_Store
+.idea/*
+.vscode/*
+
+# Dependencies are ignored during development. A Grav plugin ships its
+# vendor/ directory in the released package, so `composer install --no-dev`
+# must be run and vendor/ committed (or bundled) as part of cutting a release.
+/vendor/
+composer.lock

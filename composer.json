@@ -1,0 +1,31 @@
+{
+    "name": "grav-plugin/tailwind4",
+    "type": "grav-plugin",
+    "description": "Compiles Tailwind CSS 4.x for Grav themes from PHP, with no Node.js or build step",
+    "keywords": ["grav", "plugin", "tailwind", "tailwindcss", "css"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andy Miller",
+            "email": "andy@trilbymedia.com",
+            "homepage": "https://trilby.media"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "tailwindphp/tailwindphp": "1.4.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Grav\\Plugin\\Tailwind4\\": "classes/"
+        },
+        "classmap": [
+            "tailwind4.php"
+        ]
+    },
+    "config": {
+        "platform": {
+            "php": "8.2"
+        }
+    }
+}
