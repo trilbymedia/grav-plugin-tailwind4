@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+/*
+ * Regression fixture for the nested-@apply engine bug (patches/tailwindphp-nested-apply.patch).
+ *
+ * #bug has a MULTI-declaration @apply (mt-0 mb-0) and a nested child rule that
+ * also uses @apply. Before the patch, the nested .child rule was silently
+ * dropped. #ok uses a single-declaration @apply and always survived; it guards
+ * against a fix that would break the working case.
+ */
+#bug {
+  @apply mt-0 mb-0;
+  .child {
+    @apply block;
+  }
+}
+
+#ok {
+  @apply pl-0;
+  .kid {
+    @apply block;
+  }
+}

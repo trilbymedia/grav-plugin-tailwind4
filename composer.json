@@ -13,7 +13,8 @@
     ],
     "require": {
         "php": "^8.2",
-        "tailwindphp/tailwindphp": "1.4.2"
+        "tailwindphp/tailwindphp": "1.4.2",
+        "cweagans/composer-patches": "^1.7.3"
     },
     "autoload": {
         "psr-4": {
@@ -26,6 +27,18 @@
     "config": {
         "platform": {
             "php": "8.2"
+        },
+        "allow-plugins": {
+            "cweagans/composer-patches": true
+        }
+    },
+    "extra": {
+        "enable-patching": true,
+        "composer-exit-on-patch-failure": true,
+        "patches": {
+            "tailwindphp/tailwindphp": {
+                "Fix nested rules dropped when a rule's @apply expands to multiple declarations": "patches/tailwindphp-nested-apply.patch"
+            }
         }
     },
     "require-dev": {
