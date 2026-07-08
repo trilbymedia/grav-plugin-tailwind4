@@ -8,6 +8,14 @@ namespace Grav\Plugin\Tailwind4;
  * Immutable record of one build run, persisted as JSON to
  * `user-data://tailwind4/<theme>.json` so the admin report and CLI can show
  * what the last compile did (or why it failed) without re-running anything.
+ *
+ * Last-success retention: a failed build overwrites the persisted manifest so
+ * the admin report can show the error, but it must not lose the record of the
+ * last good build. Rather than a separate error file, a failure manifest embeds
+ * the previous successful manifest under {@see $lastSuccess} (one level deep;
+ * a success manifest carries null there). {@see BuildService} populates it, so
+ * a failed compile still tells the admin when the theme last compiled cleanly
+ * and where its output lives.
  */
 final class BuildManifest
 {
@@ -42,6 +50,12 @@ final class BuildManifest
         public readonly string $engineVersion,
         /** Peak PHP memory during the compile, in bytes. */
         public readonly int $peakMemoryBytes,
+        /**
+         * On a failure manifest, the last successful build for this theme (so
+         * the report never loses its output path / stats). Null on a success
+         * manifest and never nested more than one level deep.
+         */
+        public readonly ?self $lastSuccess = null,
     ) {
     }
 
@@ -50,7 +64,7 @@ final class BuildManifest
      */
     public function toArray(): array
     {
-        return [
+        $data = [
             'theme' => $this->theme,
             'success' => $this->success,
             'error' => $this->error,
@@ -67,6 +81,15 @@ final class BuildManifest
             'engine_version' => $this->engineVersion,
             'peak_memory_bytes' => $this->peakMemoryBytes,
         ];
+
+        // Only present on a failure manifest that has a prior good build to
+        // remember; kept one level deep (the embedded manifest never carries
+        // its own last_success).
+        if ($this->lastSuccess !== null) {
+            $data['last_success'] = $this->lastSuccess->toArray();
+        }
+
+        return $data;
     }
 
     /**
@@ -90,6 +113,9 @@ final class BuildManifest
             inputHash: (string) ($data['input_hash'] ?? ''),
             engineVersion: (string) ($data['engine_version'] ?? ''),
             peakMemoryBytes: (int) ($data['peak_memory_bytes'] ?? 0),
+            lastSuccess: isset($data['last_success']) && \is_array($data['last_success'])
+                ? self::fromArray($data['last_success'])
+                : null,
         );
     }
 

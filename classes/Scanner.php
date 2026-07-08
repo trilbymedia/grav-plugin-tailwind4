@@ -339,6 +339,13 @@ final class Scanner
      * Recursively yield scannable files under a directory, skipping excluded
      * directories.
      *
+     * An unreadable subdirectory (e.g. a locked-down folder deep in user/pages)
+     * is pruned by the filter callback before recursion is attempted, so one bad
+     * branch never aborts the whole scan. An unreadable top-level source dir
+     * still throws from the RecursiveDirectoryIterator constructor below, which
+     * the build treats as a hard error. (CATCH_GET_CHILD is deliberately not
+     * used: it collapses traversal when combined with a callback filter.)
+     *
      * @return \Generator<int, string>
      */
     private function walkDir(string $dir): \Generator
@@ -348,7 +355,10 @@ final class Scanner
                 new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS),
                 function (\SplFileInfo $current): bool {
                     if ($current->isDir()) {
-                        return !$this->isExcludedDir($current->getFilename(), $current->getPathname());
+                        $pathname = $current->getPathname();
+
+                        return is_readable($pathname)
+                            && !$this->isExcludedDir($current->getFilename(), $pathname);
                     }
 
                     return true;

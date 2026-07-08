@@ -129,6 +129,114 @@ final class BuildServiceTest extends TestCase
         );
     }
 
+    public function testUnreadableSourceDirProducesErrorManifestAndNoOutput(): void
+    {
+        if (\function_exists('posix_getuid') && posix_getuid() === 0) {
+            self::markTestSkipped('root bypasses directory permission bits');
+        }
+
+        // A source directory that exists but cannot be read (0000). The walk
+        // must fail into a clean error manifest, never a half-written output.
+        $blocked = $this->root . '/user/pages';
+        mkdir($blocked, 0775, true);
+        file_put_contents($blocked . '/page.md', "class: p-4\n");
+        chmod($blocked, 0000);
+
+        try {
+            $service = $this->makeService(sources: [$blocked]);
+            $manifest = $service->build();
+        } finally {
+            chmod($blocked, 0775);
+        }
+
+        self::assertFalse($manifest->success);
+        self::assertNotNull($manifest->error);
+        self::assertSame(0, $manifest->outputSize);
+        self::assertFileDoesNotExist($this->themeDir . '/build/css/site.css');
+    }
+
+    public function testEngineExceptionMidCompilePreservesPreviousOutput(): void
+    {
+        // A first good build establishes the baseline output.
+        self::assertTrue($this->makeService()->build()->success);
+        $outputPath = $this->themeDir . '/build/css/site.css';
+        $before = (string) file_get_contents($outputPath);
+
+        // Corrupt the input CSS so the engine throws part-way through compile
+        // (not the missing-input path — the file is present and readable).
+        file_put_contents($this->themeDir . '/css/site.css', "@import \"tailwindcss\";\n.x { color:");
+
+        $manifest = $this->makeService()->build();
+
+        self::assertFalse($manifest->success);
+        self::assertNotNull($manifest->error);
+        self::assertSame(0, $manifest->outputSize);
+
+        // Previous output survives byte-identical.
+        self::assertSame($before, (string) file_get_contents($outputPath));
+
+        // No stray tmp file was left behind next to the output.
+        $strays = glob($this->themeDir . '/build/css/*.tmp') ?: [];
+        self::assertSame([], $strays, 'A failed build must leave no partial .tmp file');
+    }
+
+    public function testFailedBuildRetainsLastSuccessInManifest(): void
+    {
+        $good = $this->makeService()->build();
+        self::assertTrue($good->success);
+
+        // Now break the input and rebuild; the failure manifest must remember
+        // the last good build (output path + size) rather than losing it.
+        file_put_contents($this->themeDir . '/css/site.css', "@import \"tailwindcss\";\n.x { color:");
+        $service = $this->makeService();
+        $failed = $service->build();
+
+        self::assertFalse($failed->success);
+        self::assertNotNull($failed->lastSuccess);
+        self::assertTrue($failed->lastSuccess->success);
+        self::assertSame($good->outputPath, $failed->lastSuccess->outputPath);
+        self::assertSame($good->outputSize, $failed->lastSuccess->outputSize);
+
+        // It round-trips through the persisted JSON, so the admin report sees it.
+        $loaded = BuildManifest::load((string) $service->manifestPath());
+        self::assertNotNull($loaded);
+        self::assertNotNull($loaded->lastSuccess);
+        self::assertSame($good->outputSize, $loaded->lastSuccess->outputSize);
+        // Retention is one level deep only.
+        self::assertNull($loaded->lastSuccess->lastSuccess);
+    }
+
+    public function testConcurrentBuildReturnsInProgressWithoutClobbering(): void
+    {
+        // Establish a good build, then hold the build lock as if another process
+        // were mid-compile.
+        self::assertTrue($this->makeService()->build()->success);
+        $outputPath = $this->themeDir . '/build/css/site.css';
+        $before = (string) file_get_contents($outputPath);
+        $manifestBefore = (string) file_get_contents((string) $this->makeService()->manifestPath());
+
+        $held = fopen($this->lockFile(), 'c');
+        self::assertNotFalse($held);
+        self::assertTrue(flock($held, LOCK_EX | LOCK_NB), 'Test must be able to hold the lock');
+
+        try {
+            // Short wait window so the contended call gives up quickly.
+            $manifest = $this->makeService(lockWaitSeconds: 0.2)->build();
+        } finally {
+            flock($held, LOCK_UN);
+            fclose($held);
+        }
+
+        self::assertFalse($manifest->success);
+        self::assertStringContainsString('already in progress', (string) $manifest->error);
+        // Non-destructive: the held build's output and manifest are untouched.
+        self::assertSame($before, (string) file_get_contents($outputPath));
+        self::assertSame($manifestBefore, (string) file_get_contents((string) $this->makeService()->manifestPath()));
+        // The transient in-progress result still reports the prior good build.
+        self::assertNotNull($manifest->lastSuccess);
+        self::assertTrue($manifest->lastSuccess->success);
+    }
+
     public function testBuildAcceptsAPreComputedScan(): void
     {
         $service = $this->makeService();
@@ -165,11 +273,16 @@ final class BuildServiceTest extends TestCase
 
     /**
      * @param array<string, mixed> $contract Overrides for the theme contract block.
+     * @param array<int, string>   $sources  Source list; defaults to the theme templates.
      */
-    private function makeService(array $contract = [], ?string $manifestDir = null): BuildService
-    {
+    private function makeService(
+        array $contract = [],
+        ?string $manifestDir = null,
+        float $lockWaitSeconds = 2.0,
+        ?array $sources = null,
+    ): BuildService {
         $themeConfig = ThemeConfig::fromArray('fixture', $this->themeDir, $contract + [
-            'sources' => ['self://templates'],
+            'sources' => $sources ?? ['self://templates'],
         ]);
 
         return new BuildService(
@@ -179,7 +292,15 @@ final class BuildServiceTest extends TestCase
             compiler: new Compiler(),
             manifestDir: $manifestDir ?? $this->manifestDir,
             minify: false,
+            lockDir: $this->cacheDir,
+            lockWaitSeconds: $lockWaitSeconds,
         );
+    }
+
+    /** Absolute path of the lock file makeService() builds serialize on. */
+    private function lockFile(): string
+    {
+        return $this->cacheDir . '/build-fixture.lock';
     }
 
     private static function copyTree(string $from, string $to): void
