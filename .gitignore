@@ -7,3 +7,4 @@
 # must be run and vendor/ committed (or bundled) as part of cutting a release.
 /vendor/
 composer.lock
+.phpunit.cache/
