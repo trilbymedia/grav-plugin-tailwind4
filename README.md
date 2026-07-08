@@ -135,9 +135,42 @@ without theme access get a 403.
 
 ## Theme contract
 
-A theme opts in by declaring a `tailwind4:` block in its own yaml (for example
-`typhoon.yaml`). Every key is optional; the defaults below are chosen so a theme that
-follows the standard layout compiles with no contract at all.
+A Tailwind-powered theme opts into PHP compilation by declaring a `tailwind4:` block
+in its own yaml (for example `typhoon.yaml` or `helios.yaml`). That block is the only
+wiring required — there is no plugin code to write and no per-theme registration.
+
+### Setting it up
+
+1. **Have a Tailwind input stylesheet.** Your theme needs a CSS entry point that
+   imports Tailwind — for example `css/site.css` containing `@import "tailwindcss";`
+   alongside your `@theme`, `@source`, and `@plugin` directives. This is the same file
+   your existing npm/Vite build compiles, so a theme that already builds Tailwind with
+   Node has it.
+
+2. **Add the contract block** to your theme's yaml. If your theme follows the standard
+   layout (input `css/site.css`, output `build/css/site.css`), the block is entirely
+   optional — the plugin's defaults already compile it, so an empty `tailwind4:` (or no
+   block at all) works. Declare it explicitly to be self-documenting or to override a
+   default:
+
+   ```yaml
+   tailwind4:
+     input: css/site.css
+     output: build/css/site.css
+   ```
+
+3. **Compile.** Trigger a build from the admin button, automatically on config save, or
+   from the CLI with `bin/plugin tailwind4 compile <theme>`. The result is written to
+   `output` (default `build/css/site.css`) — the exact path your npm build already
+   writes, so your templates need no changes and the PHP build is a drop-in replacement.
+
+That is the whole setup. Everything below is optional tuning for themes that deviate
+from the standard layout or need extra classes scanned.
+
+### Reference
+
+Every key is optional; the defaults below are chosen so a standard-layout theme
+compiles with no contract at all.
 
 ```yaml
 tailwind4:
