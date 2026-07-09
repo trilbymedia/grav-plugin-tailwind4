@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ce1fb72d0d1fb408654d0789e87370fe",
+    "content-hash": "b90d9de320fb283d061be8d0976ee9fa",
     "packages": [
         {
             "name": "trilbymedia/tailwindphp",
-            "version": "dev-trilby",
+            "version": "v1.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/trilbymedia/tailwindphp.git",
-                "reference": "502e485"
+                "reference": "e12eb250cc5fd6c09dbc0c862318a1fec5bb2fde"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/trilbymedia/tailwindphp/zipball/502e485",
-                "reference": "502e485",
+                "url": "https://api.github.com/repos/trilbymedia/tailwindphp/zipball/e12eb250cc5fd6c09dbc0c862318a1fec5bb2fde",
+                "reference": "e12eb250cc5fd6c09dbc0c862318a1fec5bb2fde",
                 "shasum": ""
             },
             "require": {
@@ -204,7 +204,7 @@
                 "issues": "https://github.com/trilbymedia/tailwindphp/issues",
                 "source": "https://github.com/trilbymedia/tailwindphp"
             },
-            "time": "2026-07-08T14:46:33+00:00"
+            "time": "2026-07-09T00:32:52+00:00"
         }
     ],
     "packages-dev": [
@@ -1973,18 +1973,9 @@
             "time": "2025-11-17T20:03:58+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "trilbymedia/tailwindphp",
-            "version": "dev-trilby",
-            "alias": "1.4.2",
-            "alias_normalized": "1.4.2.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "trilbymedia/tailwindphp": 20
-    },
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

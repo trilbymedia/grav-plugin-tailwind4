@@ -73,6 +73,21 @@ class ComposerStaticInitf790792702556d44c182432e45cd09b1
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Grav\\Plugin\\Tailwind4Plugin' => __DIR__ . '/../..' . '/tailwind4.php',
+        'Grav\\Plugin\\Tailwind4\\Api\\StatusPayload' => __DIR__ . '/../..' . '/classes/Api/StatusPayload.php',
+        'Grav\\Plugin\\Tailwind4\\Api\\Tailwind4ApiController' => __DIR__ . '/../..' . '/classes/Api/Tailwind4ApiController.php',
+        'Grav\\Plugin\\Tailwind4\\BuildManifest' => __DIR__ . '/../..' . '/classes/BuildManifest.php',
+        'Grav\\Plugin\\Tailwind4\\BuildService' => __DIR__ . '/../..' . '/classes/BuildService.php',
+        'Grav\\Plugin\\Tailwind4\\CompileException' => __DIR__ . '/../..' . '/classes/CompileException.php',
+        'Grav\\Plugin\\Tailwind4\\CompileResult' => __DIR__ . '/../..' . '/classes/CompileResult.php',
+        'Grav\\Plugin\\Tailwind4\\Compiler' => __DIR__ . '/../..' . '/classes/Compiler.php',
+        'Grav\\Plugin\\Tailwind4\\ParityHarness' => __DIR__ . '/../..' . '/classes/ParityHarness.php',
+        'Grav\\Plugin\\Tailwind4\\ScanResult' => __DIR__ . '/../..' . '/classes/ScanResult.php',
+        'Grav\\Plugin\\Tailwind4\\Scanner' => __DIR__ . '/../..' . '/classes/Scanner.php',
+        'Grav\\Plugin\\Tailwind4\\SourceResolver' => __DIR__ . '/../..' . '/classes/SourceResolver.php',
+        'Grav\\Plugin\\Tailwind4\\ThemeConfig' => __DIR__ . '/../..' . '/classes/ThemeConfig.php',
+        'TailwindPHP\\Cli\\Application' => __DIR__ . '/..' . '/trilbymedia/tailwindphp/src/Cli/Application.php',
+        'TailwindPHP\\Cli\\Console\\Input' => __DIR__ . '/..' . '/trilbymedia/tailwindphp/src/Cli/Console/Input.php',
+        'TailwindPHP\\Cli\\Console\\Output' => __DIR__ . '/..' . '/trilbymedia/tailwindphp/src/Cli/Console/Output.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
