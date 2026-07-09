@@ -1,3 +1,11 @@
+# v1.0.3
+## 07/08/2026
+
+1. [](#bugfix)
+    * Updated the vendored Tailwind engine to [`trilbymedia/tailwindphp` 1.4.3](https://github.com/trilbymedia/tailwindphp), which fixes the minifier collapsing the descendant combinator before a pseudo-class. Minified selectors like `.prose :where(h1)` were being rewritten to `.prose:where(h1)`, so every `@tailwindcss/typography` rule (headings, paragraphs, lists, code) matched nothing and prose content rendered unstyled. Typography now compiles correctly.
+1. [](#improved)
+    * The engine is now referenced by tagged release (`^1.4.3`) instead of a pinned branch commit, so `composer update` picks up future fork fixes without editing the constraint.
+
 # v1.0.2
 ## 07/08/2026
 
