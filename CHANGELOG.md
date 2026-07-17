@@ -1,3 +1,9 @@
+# v1.0.4
+## 07/17/2026
+
+1. [](#bugfix)
+    * Fixed shortcodes with a colon (such as `[figure caption="Source: Archives"]`) breaking a page's compiled CSS, which knocked out dark mode and responsive styles.
+
 # v1.0.3
 ## 07/08/2026
 
