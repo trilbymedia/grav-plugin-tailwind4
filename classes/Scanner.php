@@ -183,7 +183,7 @@ final class Scanner
             $raw = substr($content, $start, $i - $start);
             $token = self::normalizeToken($raw);
 
-            if ($token !== '' && self::isPlausible($token)) {
+            if ($token !== '' && self::isPlausible($token) && self::isEmittable($token)) {
                 $tokens[$token] = true;
             }
 
@@ -305,6 +305,30 @@ final class Scanner
     private static function isPlausible(string $token): bool
     {
         return (bool) preg_match('/[A-Za-z]/', $token);
+    }
+
+    /**
+     * Reject captures that can never be a real Tailwind candidate but would
+     * still be emitted as malformed CSS if handed to the engine.
+     *
+     * The scanner treats `[` as the start of an arbitrary-property candidate
+     * (`[mask-type:alpha]`), but Grav and Markdown shortcodes use the very same
+     * brackets — e.g. `[figure caption="Source: Archives Service"]`. Because the
+     * balanced-bracket capture swallows the whole shortcode, it reaches the
+     * compiler as a bare arbitrary property and is emitted as a broken rule
+     * (`.\[figure…\] { figure caption="Source: Archives Service" }`). The browser
+     * CSS parser aborts on that declaration ("Expected declaration…") and its
+     * error recovery skips following rules too, silently dropping real utilities.
+     *
+     * A genuine arbitrary property or value never contains whitespace (Tailwind
+     * escapes spaces as `_`), an `=`, or a double quote, so any capture carrying
+     * one of those is a shortcode false positive and is dropped here. Prefixed
+     * arbitrary values that legitimately use single quotes (`content-['*']`) are
+     * untouched, since this only rejects whitespace, `=`, and double quotes.
+     */
+    private static function isEmittable(string $token): bool
+    {
+        return !preg_match('/[\s="]/', $token);
     }
 
     /**

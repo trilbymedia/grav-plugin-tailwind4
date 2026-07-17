@@ -107,6 +107,51 @@ final class ScannerTest extends TestCase
         self::assertContains('gap-2', $tokens);
     }
 
+    /**
+     * Grav/Markdown shortcodes share `[...]` with Tailwind arbitrary properties.
+     * A shortcode carrying a colon — e.g. `[figure caption="Source: X"]` — used
+     * to be captured whole and emitted as a broken CSS rule, whose parse error
+     * dropped following utilities (forum report: broken dark mode + mobile-only
+     * layout). Such captures must never become candidates.
+     *
+     * @return array<string, array{0: string}>
+     */
+    public static function shortcodeFalsePositiveCases(): array
+    {
+        return [
+            'figure caption with colon' => ['[figure caption="Source: Archives Service"]'],
+            'safe-email with subject colon' => ['[safe-email autolink="true" subject="Complaint: Website"]'],
+        ];
+    }
+
+    #[DataProvider('shortcodeFalsePositiveCases')]
+    public function testTokenizeDropsShortcodeBracketCaptures(string $content): void
+    {
+        $tokens = Scanner::tokenize($content);
+
+        foreach ($tokens as $token) {
+            self::assertDoesNotMatchRegularExpression(
+                '/[\s="]/',
+                $token,
+                sprintf('Shortcode capture leaked an unemittable candidate: %s', $token),
+            );
+        }
+
+        // The inner words are still harmless to keep; only the whole-bracket
+        // capture that compiles to malformed CSS must be gone.
+        self::assertNotContains('[figure caption="Source: Archives Service"]', $tokens);
+    }
+
+    public function testTokenizeKeepsGenuineArbitraryProperties(): void
+    {
+        $tokens = Scanner::tokenize('[mask-type:alpha] [--my-var:red] after:content-[\'*\'] p-[3.5rem]');
+
+        self::assertContains('[mask-type:alpha]', $tokens);
+        self::assertContains('[--my-var:red]', $tokens);
+        self::assertContains("after:content-['*']", $tokens);
+        self::assertContains('p-[3.5rem]', $tokens);
+    }
+
     public function testScanReturnsScanResultWithStats(): void
     {
         $dir = $this->makeTree([
