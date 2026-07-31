@@ -1,3 +1,9 @@
+# v1.0.6
+## 07/31/2026
+
+1. [](#bugfix)
+    * Fixed dark-mode styles leaking into light mode when a rule groups several selectors together, such as `.form-input, .form-textarea, .form-select { @apply dark:bg-gray-800 }`. Only the last selector in the group was correctly limited to dark mode; the rest were styled all the time. Requires the updated engine ([`trilbymedia/tailwindphp` 1.6.2](https://github.com/trilbymedia/tailwindphp)).
+
 # v1.0.5
 ## 07/31/2026
 
