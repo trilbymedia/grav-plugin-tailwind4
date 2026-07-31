@@ -2,17 +2,17 @@
     "packages": [
         {
             "name": "trilbymedia/tailwindphp",
-            "version": "v1.4.3",
-            "version_normalized": "1.4.3.0",
+            "version": "v1.6.1",
+            "version_normalized": "1.6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/trilbymedia/tailwindphp.git",
-                "reference": "e12eb250cc5fd6c09dbc0c862318a1fec5bb2fde"
+                "reference": "0de9f68e7a9fb470b89b40a910ba852f87c4af82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/trilbymedia/tailwindphp/zipball/e12eb250cc5fd6c09dbc0c862318a1fec5bb2fde",
-                "reference": "e12eb250cc5fd6c09dbc0c862318a1fec5bb2fde",
+                "url": "https://api.github.com/repos/trilbymedia/tailwindphp/zipball/0de9f68e7a9fb470b89b40a910ba852f87c4af82",
+                "reference": "0de9f68e7a9fb470b89b40a910ba852f87c4af82",
                 "shasum": ""
             },
             "require": {
@@ -24,7 +24,7 @@
                 "phpstan/phpstan": "^2.1",
                 "phpunit/phpunit": "^10.0"
             },
-            "time": "2026-07-09T00:32:52+00:00",
+            "time": "2026-07-31T15:02:41+00:00",
             "bin": [
                 "bin/tailwindphp"
             ],
@@ -73,7 +73,8 @@
                     "src/plugin.php",
                     "src/plugin/plugins/typography-plugin.php",
                     "src/plugin/plugins/forms-plugin.php",
-                    "src/index.php"
+                    "src/index.php",
+                    "src/state-cache.php"
                 ]
             },
             "autoload-dev": {

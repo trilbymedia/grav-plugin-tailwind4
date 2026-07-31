@@ -1,3 +1,9 @@
+# v1.0.5
+## 07/31/2026
+
+1. [](#improved)
+    * Updated the bundled Tailwind engine to [`trilbymedia/tailwindphp` 1.6.1](https://github.com/trilbymedia/tailwindphp), which brings in the upstream 1.5.0 and 1.6.0 work while keeping every fix the fork carries. Compiled CSS is byte-identical to the previous release.
+
 # v1.0.4
 ## 07/17/2026
 

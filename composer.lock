@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b90d9de320fb283d061be8d0976ee9fa",
+    "content-hash": "c379957a896eca0b323989ee21e43255",
     "packages": [
         {
             "name": "trilbymedia/tailwindphp",
-            "version": "v1.4.3",
+            "version": "v1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/trilbymedia/tailwindphp.git",
-                "reference": "e12eb250cc5fd6c09dbc0c862318a1fec5bb2fde"
+                "reference": "0de9f68e7a9fb470b89b40a910ba852f87c4af82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/trilbymedia/tailwindphp/zipball/e12eb250cc5fd6c09dbc0c862318a1fec5bb2fde",
-                "reference": "e12eb250cc5fd6c09dbc0c862318a1fec5bb2fde",
+                "url": "https://api.github.com/repos/trilbymedia/tailwindphp/zipball/0de9f68e7a9fb470b89b40a910ba852f87c4af82",
+                "reference": "0de9f68e7a9fb470b89b40a910ba852f87c4af82",
                 "shasum": ""
             },
             "require": {
@@ -76,7 +76,8 @@
                     "src/plugin.php",
                     "src/plugin/plugins/typography-plugin.php",
                     "src/plugin/plugins/forms-plugin.php",
-                    "src/index.php"
+                    "src/index.php",
+                    "src/state-cache.php"
                 ]
             },
             "autoload-dev": {
@@ -204,7 +205,7 @@
                 "issues": "https://github.com/trilbymedia/tailwindphp/issues",
                 "source": "https://github.com/trilbymedia/tailwindphp"
             },
-            "time": "2026-07-09T00:32:52+00:00"
+            "time": "2026-07-31T15:02:41+00:00"
         }
     ],
     "packages-dev": [
