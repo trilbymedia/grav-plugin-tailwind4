@@ -2,17 +2,17 @@
     "packages": [
         {
             "name": "trilbymedia/tailwindphp",
-            "version": "v1.6.1",
-            "version_normalized": "1.6.1.0",
+            "version": "v1.6.2",
+            "version_normalized": "1.6.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/trilbymedia/tailwindphp.git",
-                "reference": "0de9f68e7a9fb470b89b40a910ba852f87c4af82"
+                "reference": "be9774445a2f747f6b54576047980e28531d307c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/trilbymedia/tailwindphp/zipball/0de9f68e7a9fb470b89b40a910ba852f87c4af82",
-                "reference": "0de9f68e7a9fb470b89b40a910ba852f87c4af82",
+                "url": "https://api.github.com/repos/trilbymedia/tailwindphp/zipball/be9774445a2f747f6b54576047980e28531d307c",
+                "reference": "be9774445a2f747f6b54576047980e28531d307c",
                 "shasum": ""
             },
             "require": {
@@ -24,7 +24,7 @@
                 "phpstan/phpstan": "^2.1",
                 "phpunit/phpunit": "^10.0"
             },
-            "time": "2026-07-31T15:02:41+00:00",
+            "time": "2026-07-31T15:24:27+00:00",
             "bin": [
                 "bin/tailwindphp"
             ],
