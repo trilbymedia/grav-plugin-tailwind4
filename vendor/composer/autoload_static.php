@@ -46,6 +46,7 @@ class ComposerStaticInitf790792702556d44c182432e45cd09b1
         '217915a835c2faeb1a76946752ec3a1f' => __DIR__ . '/..' . '/trilbymedia/tailwindphp/src/plugin/plugins/typography-plugin.php',
         '84d69f98e7a77ade9cdb4ca229744efd' => __DIR__ . '/..' . '/trilbymedia/tailwindphp/src/plugin/plugins/forms-plugin.php',
         'b56329a6f350a18d945809f066fcd8dd' => __DIR__ . '/..' . '/trilbymedia/tailwindphp/src/index.php',
+        'afc23fe678ec722a64b503b97d4cc238' => __DIR__ . '/..' . '/trilbymedia/tailwindphp/src/state-cache.php',
     );
 
     public static $prefixLengthsPsr4 = array (
