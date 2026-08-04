@@ -1,3 +1,9 @@
+# v1.0.7
+## 08/04/2026
+
+1. [](#bugfix)
+    * Fixed CSS transforms, filters and several other composed utilities compiling to declarations the browser throws away. Classes such as `translate-x-7`, `scale-x-50`, `rotate-x-45`, `blur-sm`, `backdrop-blur-sm`, `duration-300`, `ease-out`, `leading-6`, `tracking-wide`, `tabular-nums`, `contain-layout`, `touch-pan-x`, `snap-x` and `border-spacing-2` set their `--tw-*` variable but the composed `translate` / `transform` / `filter` / `contain` declaration stayed inert, so animated toggles and sliders never moved. Requires the updated engine ([`trilbymedia/tailwindphp` 1.6.3](https://github.com/trilbymedia/tailwindphp)).
+
 # v1.0.6
 ## 07/31/2026
 
