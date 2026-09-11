@@ -73,6 +73,13 @@ final class Tailwind4ApiController extends AbstractApiController
     {
         $user = $this->getUser($request);
 
+        // API-key scope cap first. Every check below reads the account behind
+        // the key, so a key scoped to something unrelated on a super-admin or
+        // theme-admin account used to be able to trigger a compile.
+        if (!$this->scopeAllows($request, 'admin.themes') && !$this->scopeAllows($request, 'admin.super')) {
+            throw new ForbiddenException('API key is not authorized to compile Tailwind CSS.');
+        }
+
         if (
             $this->isSuperAdmin($user)
             || (bool) $user->get('access.admin.super')

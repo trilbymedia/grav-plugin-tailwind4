@@ -1,3 +1,9 @@
+# v1.0.8
+## 09/10/2026
+
+1. [](#bugfix)
+    * An API key limited to specific permissions can no longer start a Tailwind CSS compile unless it was given theme or super admin access, even when the account that created it is a super admin
+
 # v1.0.7
 ## 08/04/2026
 
