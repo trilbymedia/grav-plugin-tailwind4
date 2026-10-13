@@ -336,7 +336,7 @@ final class BuildService
             throw new RuntimeException(sprintf('Unable to create output directory "%s"', $dir));
         }
 
-        $tmp = $path . '.' . getmypid() . '.tmp';
+        $tmp = $path . '.' . bin2hex(random_bytes(6)) . '.tmp';
         if (@file_put_contents($tmp, $css) === false) {
             @unlink($tmp);
             throw new RuntimeException(sprintf('Unable to write output file "%s"', $tmp));

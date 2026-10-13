@@ -1,3 +1,9 @@
+# v1.0.9
+## 10/13/2026
+
+1. [](#bugfix)
+    * Works on hosts that disable `getmypid()` (a common PHP-FPM hardening). The build manifest, the build output and the class scanner's cache named their temporary files after the process id, which is a fatal error there; the names now end in a random string
+
 # v1.0.8
 ## 09/10/2026
 
