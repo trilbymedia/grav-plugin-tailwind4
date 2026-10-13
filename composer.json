@@ -19,7 +19,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "trilbymedia/tailwindphp": "^1.6.3"
+        "trilbymedia/tailwindphp": "^1.6.4"
     },
     "autoload": {
         "psr-4": {

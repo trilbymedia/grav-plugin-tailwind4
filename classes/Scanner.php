@@ -494,7 +494,7 @@ final class Scanner
 
         // Atomic-ish write: tmp file + rename so a concurrent reader never sees
         // a half-written cache entry.
-        $tmp = $cacheFile . '.' . getmypid() . '.tmp';
+        $tmp = $cacheFile . '.' . bin2hex(random_bytes(6)) . '.tmp';
         if (@file_put_contents($tmp, $json) !== false) {
             @rename($tmp, $cacheFile);
         }

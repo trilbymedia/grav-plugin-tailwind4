@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a21e33da3e43a2f841804157f0f6b6cc",
+    "content-hash": "b6fca917e67c7d4d79770c711063586c",
     "packages": [
         {
             "name": "trilbymedia/tailwindphp",
-            "version": "v1.6.3",
+            "version": "v1.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/trilbymedia/tailwindphp.git",
-                "reference": "1c341391a2c35ef3446723d81d7bd42854319ba9"
+                "reference": "30f8aec8b24aed1b95b63b3d29ad9e877d34f96d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/trilbymedia/tailwindphp/zipball/1c341391a2c35ef3446723d81d7bd42854319ba9",
-                "reference": "1c341391a2c35ef3446723d81d7bd42854319ba9",
+                "url": "https://api.github.com/repos/trilbymedia/tailwindphp/zipball/30f8aec8b24aed1b95b63b3d29ad9e877d34f96d",
+                "reference": "30f8aec8b24aed1b95b63b3d29ad9e877d34f96d",
                 "shasum": ""
             },
             "require": {
@@ -205,7 +205,7 @@
                 "issues": "https://github.com/trilbymedia/tailwindphp/issues",
                 "source": "https://github.com/trilbymedia/tailwindphp"
             },
-            "time": "2026-08-04T11:27:57+00:00"
+            "time": "2026-10-13T21:26:22+00:00"
         }
     ],
     "packages-dev": [
