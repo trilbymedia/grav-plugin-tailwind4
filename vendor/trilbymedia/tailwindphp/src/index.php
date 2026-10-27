@@ -1243,6 +1243,16 @@ function parseCssState(array &$ast, array $options = []): array
 
                         return WalkAction::Replace($wrappedAst);
                     }
+
+                    // Nothing to inline: the file is missing, empty, or was
+                    // already imported. Drop the statement, as Tailwind does,
+                    // rather than leave a local @import in the output. There it
+                    // sits after the expanded rules, so browsers ignore it with
+                    // a console warning (or would request a path that is not
+                    // there). Remote and data: imports are kept for the browser.
+                    if (!preg_match('#^(?:[a-z][a-z0-9+.-]*:|//)#i', $importPath)) {
+                        return WalkAction::Replace([]);
+                    }
                 }
             }
 

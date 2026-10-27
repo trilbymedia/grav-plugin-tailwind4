@@ -79,6 +79,23 @@ final class CompilerTest extends TestCase
         $this->assertStringContainsString('max-width: 80rem', $result->css);
     }
 
+    /**
+     * A local @import with nothing to inline (missing file, repeat import, or
+     * empty file) must be dropped, not left in the output. Left in place it sits
+     * after the expanded rules, where browsers ignore it with a console warning
+     * (Typhoon's generated, unshipped css/_sources.css, grav-premium-issues#635).
+     */
+    public function testLocalImportsWithNothingToInlineAreDropped(): void
+    {
+        foreach ([false, true] as $minify) {
+            $css = (new Compiler())->compile(self::FIXTURES . '/unresolved/input.css', ['flex'], minify: $minify)->css;
+
+            $this->assertStringNotContainsString('@import', $css);
+            $this->assertStringContainsString('unresolved-marker', $css);
+            $this->assertSame(1, substr_count($css, 'unresolved-partial'), 'A repeated import is inlined once');
+        }
+    }
+
     /** Acceptance (d): @source inline() classes appear without being candidates. */
     public function testSourceInlineProducesClassesNotInCandidateList(): void
     {
