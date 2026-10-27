@@ -1,3 +1,9 @@
+# v1.0.10
+## 10/26/2026
+
+1. [](#bugfix)
+    * A theme's `@import` of a local file that isn't there (such as Typhoon's and Helios's `_sources.css`, which only exists in a Node setup) is dropped from the compiled CSS instead of being left in the middle of it, where Chrome warns about it. Bundles TailwindPHP 1.6.5 [getgrav/grav-premium-issues#635](https://github.com/getgrav/grav-premium-issues/issues/635)
+
 # v1.0.9
 ## 10/13/2026
 

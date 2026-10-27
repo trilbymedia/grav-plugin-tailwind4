@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.5] - 2026-10-26
+
+### Fixed
+
+- **An `@import` of a local file that has nothing to inline is dropped.** A missing or empty file used to leave its `@import` statement verbatim in the output, after the expanded rules, where browsers ignore it with a console warning (Typhoon's and Helios's `_sources.css`, which only exists in a Node setup). Remote and `data:` imports are kept. [getgrav/grav-premium-issues#635](https://github.com/getgrav/grav-premium-issues/issues/635)
+
 ## [1.6.4] - 2026-10-13
 
 ### Fixed
